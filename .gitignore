@@ -1,0 +1,14 @@
+project/fs19/ll
+project/fs19/.vs/
+project/_box/.vs/
+project/fs19/x64/
+project/fs19/Debug/
+project/_box/x64/
+project/_box/Debug/
+project/_box/.vs
+src/fs19/*.aps
+src/fs19/*.bak
+src/_box/*.aps
+src/_box/*.bak
+src/_box/misc/*.bak
+tags
