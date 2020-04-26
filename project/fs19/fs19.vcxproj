@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <ProjectGuid>{C723C514-628C-4A98-BF3B-3E4841211AFD}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>fs19</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\user\products\src\_box\misc;C:\user\products\src\_box;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\user\products\src\_box;C:\user\products\src\_box\misc;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>C:\user\products\src\_box\misc;C:\user\products\src\_box;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>Shlwapi.lib;comctl32.lib;WS2_32.Lib;IPHlpApi.Lib;Uxtheme.lib;Imm32.lib;mpr.lib;imagehlp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>Shlwapi.lib;comctl32.lib;WS2_32.Lib;IPHlpApi.Lib;Uxtheme.lib;Imm32.lib;mpr.lib;imagehlp.lib;GdiPlus.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MinSpace</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>Shlwapi.lib;comctl32.lib;WS2_32.Lib;IPHlpApi.Lib;Uxtheme.lib;Imm32.lib;mpr.lib;imagehlp.lib;GdiPlus.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\_box\_box.vcxproj">
+      <Project>{42603ca4-617a-4d5d-b456-114fe7daac57}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\src\FS19\bitmap1.bmp" />
+    <Image Include="..\..\src\FS19\bitmap2.bmp" />
+    <Image Include="..\..\src\FS19\bmp00001.bmp" />
+    <Image Include="..\..\src\FS19\bmp00002.bmp" />
+    <Image Include="..\..\src\FS19\bmp00003.bmp" />
+    <Image Include="..\..\src\FS19\bmp00004.bmp" />
+    <Image Include="..\..\src\FS19\bmp00005.bmp" />
+    <Image Include="..\..\src\FS19\bmp00006.bmp" />
+    <Image Include="..\..\src\FS19\bmp00007.bmp" />
+    <Image Include="..\..\src\FS19\bmp00008.bmp" />
+    <Image Include="..\..\src\FS19\bmp00009.bmp" />
+    <Image Include="..\..\src\FS19\bmp00010.bmp" />
+    <Image Include="..\..\src\FS19\fs19.ico" />
+    <Image Include="..\..\src\FS19\icon2.ico" />
+    <Image Include="..\..\src\FS19\small.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\FS19\CommonPidList.h" />
+    <ClInclude Include="..\..\src\FS19\ContextMenu.h" />
+    <ClInclude Include="..\..\src\FS19\CopyFuncs.h" />
+    <ClInclude Include="..\..\src\FS19\formatinc.h" />
+    <ClInclude Include="..\..\src\FS19\iAttrDlg.h" />
+    <ClInclude Include="..\..\src\FS19\iBaseView.h" />
+    <ClInclude Include="..\..\src\FS19\iComButton.h" />
+    <ClInclude Include="..\..\src\FS19\iComEdit.h" />
+    <ClInclude Include="..\..\src\FS19\iComList.h" />
+    <ClInclude Include="..\..\src\FS19\iDirectoryView.h" />
+    <ClInclude Include="..\..\src\FS19\iDragDrop.h" />
+    <ClInclude Include="..\..\src\FS19\iEjectDskDlg.h" />
+    <ClInclude Include="..\..\src\FS19\iFindDlg.h" />
+    <ClInclude Include="..\..\src\FS19\iHistory.h" />
+    <ClInclude Include="..\..\src\FS19\iIcon.h" />
+    <ClInclude Include="..\..\src\FS19\iInfoView.h" />
+    <ClInclude Include="..\..\src\FS19\iKakuninDlg.h" />
+    <ClInclude Include="..\..\src\FS19\iLogDskDlg.h" />
+    <ClInclude Include="..\..\src\FS19\iMainApp.h" />
+    <ClInclude Include="..\..\src\FS19\iMkDirDlg.h" />
+    <ClInclude Include="..\..\src\FS19\iPt.h" />
+    <ClInclude Include="..\..\src\FS19\iRenameDlg.h" />
+    <ClInclude Include="..\..\src\FS19\iScrollView.h" />
+    <ClInclude Include="..\..\src\FS19\iSeachView.h" />
+    <ClInclude Include="..\..\src\FS19\iSettingDialog.h" />
+    <ClInclude Include="..\..\src\FS19\iShortcutView.h" />
+    <ClInclude Include="..\..\src\FS19\iSubApp.h" />
+    <ClInclude Include="..\..\src\FS19\GdiLoadImage.h" />
+    <ClInclude Include="..\..\src\FS19\logf.h" />
+    <ClInclude Include="..\..\src\FS19\Resource.h" />
+    <ClInclude Include="..\..\src\FS19\SubFuncs.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\FS19\CommonPidList.cpp" />
+    <ClCompile Include="..\..\src\FS19\ContextMenu.cpp" />
+    <ClCompile Include="..\..\src\FS19\CopyFuncs.cpp" />
+    <ClCompile Include="..\..\src\FS19\formatinc.cpp" />
+    <ClCompile Include="..\..\src\FS19\iAttrDlg.cpp" />
+    <ClCompile Include="..\..\src\FS19\iBaseView.cpp" />
+    <ClCompile Include="..\..\src\FS19\iComButton.cpp" />
+    <ClCompile Include="..\..\src\FS19\iComEdit.cpp" />
+    <ClCompile Include="..\..\src\FS19\iComList.cpp" />
+    <ClCompile Include="..\..\src\FS19\iDirectoryView.cpp" />
+    <ClCompile Include="..\..\src\FS19\iDragDrop.cpp" />
+    <ClCompile Include="..\..\src\FS19\iEjectDskDlg.cpp" />
+    <ClCompile Include="..\..\src\FS19\iFindDlg.cpp" />
+    <ClCompile Include="..\..\src\FS19\iHistory.cpp" />
+    <ClCompile Include="..\..\src\FS19\iIcon.cpp" />
+    <ClCompile Include="..\..\src\FS19\iInfoView.cpp" />
+    <ClCompile Include="..\..\src\FS19\iKakuninDlg.cpp" />
+    <ClCompile Include="..\..\src\FS19\iLogDskDlg.cpp" />
+    <ClCompile Include="..\..\src\FS19\iMainApp.cpp" />
+    <ClCompile Include="..\..\src\FS19\iMkDirDlg.cpp" />
+    <ClCompile Include="..\..\src\FS19\iNamelist.cpp" />
+    <ClCompile Include="..\..\src\FS19\iPt.cpp" />
+    <ClCompile Include="..\..\src\FS19\iRenameDlg.cpp" />
+    <ClCompile Include="..\..\src\FS19\iScrollView.cpp" />
+    <ClCompile Include="..\..\src\FS19\iSeachView.cpp" />
+    <ClCompile Include="..\..\src\FS19\iSettingDialog.cpp" />
+    <ClCompile Include="..\..\src\FS19\iSubApp.cpp" />
+    <ClCompile Include="..\..\src\FS19\GdiLoadImage.cpp" />
+    <ClCompile Include="..\..\src\FS19\logf.cpp" />
+    <ClCompile Include="..\..\src\FS19\SubFuncs.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\..\src\FS19\fs19.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="..\..\src\FS19\fs19.exe.manifest" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
