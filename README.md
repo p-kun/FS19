@@ -5,7 +5,7 @@ Version 1.4.0
 </div>
 dows ile & irectory tool
 
-#### 目次
+#### Table of contents
 ***
 1. Introduction
 1. How to use
@@ -15,7 +15,6 @@ dows ile & irectory tool
 This software was created by being impressed by the software called "FD" used in the MS-DOS era.
 
 #### 2. How to use
-|Key|Feature Description|
 
 | Key | name | Feature Description |
 | ---- | ---- | ---- |
@@ -30,4 +29,4 @@ This software was created by being impressed by the software called "FD" used in
 | ] | Change drive | You can change the drive. You can also move the directory. |
 
 #### 3. Distribution file
-`Fs19.exe` One file is OK.
+`release\Fs19.exe` One file is OK.
