@@ -56,7 +56,6 @@ enum {
 };
 
 dirent* ReadClips( HWND hWnd, HANDLE hHeap, const TCHAR *dir_path );
-BOOL    CopyExec( HWND hWnd, dirent* top, const TCHAR *dir );
 BOOL    CheckCopyInfo( HWND hWnd, dirent* top, const TCHAR *dir );
 int     CheckClips( HWND hWnd );
 
