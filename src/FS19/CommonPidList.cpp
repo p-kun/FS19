@@ -109,14 +109,21 @@ LPITEMIDLIST ConvPath2PIDList( IShellFolder *pFolder, TCHAR path[] )
 {
   IShellFolder* pDesktopFolder = NULL;
   LPITEMIDLIST  pID = NULL;
-  OLECHAR       olePath[ MAX_PATH ];
+  OLECHAR      *olePath;
   ULONG         size = 0;
   ULONG         attr = 0;
+  size_t        len;
 
-#ifndef UNICODE
-  MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED, path, -1, olePath, MAX_PATH );
+  len = _tcslen(path) + 1;
+
+  olePath = (TCHAR *)malloc(len * sizeof(TCHAR));
+
+  assert(olePath);
+
+#ifdef UNICODE
+  _tcscpy_s(olePath, len, path);
 #else
-  _tcscpy_s( olePath, MAX_PATH, path );
+  MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, path, -1, olePath, len);
 #endif
 
   if ( pFolder == NULL )
@@ -132,6 +139,8 @@ LPITEMIDLIST ConvPath2PIDList( IShellFolder *pFolder, TCHAR path[] )
     {
       pFolder->ParseDisplayName( NULL, NULL, olePath, &size, &pID, &attr );
     }
+
+  free(olePath);
 
   return pID;
 }
@@ -150,13 +159,22 @@ LPITEMIDLIST ConvPath2PIDList( HWND hWnd, TCHAR path[] )
   IShellFolder* pFolder  = NULL;
   LPMALLOC      pMalloc  = NULL;
   LPITEMIDLIST  pID = NULL;
-  OLECHAR       oleName[ MAX_PATH ];
-  OLECHAR       olePath[ MAX_PATH ];
+  OLECHAR      *cp;
+  OLECHAR      *oleName;
+  OLECHAR      *olePath;
   ULONG         size = 0;
   ULONG         attr = 0;
+  size_t        len;
 
-  _tcscpy_s( olePath, MAX_PATH, path );
-  _tcscpy_s( oleName, MAX_PATH, path );
+  len = _tcslen(path) + 1;
+
+  cp = (OLECHAR *)malloc(len * sizeof(OLECHAR) * 2);
+
+  olePath = cp;
+  oleName = cp + len;
+
+  _tcscpy_s( olePath, len, path );
+  _tcscpy_s( oleName, len, path );
 
   PathRemoveFileSpec( olePath );
   PathStripPath( oleName );
@@ -198,6 +216,8 @@ LPITEMIDLIST ConvPath2PIDList( HWND hWnd, TCHAR path[] )
           pMalloc->Release();
         }
     }
+
+  free(cp);
 
   return pID;
 }

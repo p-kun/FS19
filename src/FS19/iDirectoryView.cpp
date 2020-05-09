@@ -71,6 +71,7 @@ void iDirectoryView::Draw( HWND hWnd, HDC hDC, int x, int y, int cx, int cy )
   xTmpDC  dc( hDC );
   xBmpDC  bmp;
   iPt     pt;
+  RECT   *rc;
 
   bmp.Create( dc, cx, cy );
   bmp.SetSelectFont( m_fontname, m_fontsize );
@@ -94,7 +95,16 @@ void iDirectoryView::Draw( HWND hWnd, HDC hDC, int x, int y, int cx, int cy )
           bmp.SetTextColor( Brend( 0, 50 ) );
         }
 
-      DrawMain( bmp, m_prev_id, cx, /*bmp.tm.tmHeight*/cy, m_focus );
+      rc = &mi_lines[6].rc;
+
+      bmp.Rectangle(rc->left,
+                    0,
+                    cx - rc->left - 8 - 72,
+                    cy,
+                    pt.COL_SPLIT_LINE,
+                    pt.COL_BASE_BAR);
+
+      DrawMain( bmp, m_prev_id, cx, cy, m_focus );
     }
   else
     {
@@ -258,10 +268,19 @@ iDirectoryView::~iDirectoryView()
 // ==========================================================================
 // -- 
 // --------------------------------------------------------------------------
-int iDirectoryView::SetMiiSubRect( HDC hDC, ICONICON2 *lines, int x, int cy, WORD id, int offset, const TCHAR *str )
+int iDirectoryView::SetMiiSubRect(HDC          hDC,
+                                  int          idx,
+                                  int          x,
+                                  int          cy,
+                                  WORD         id,
+                                  int          offset,
+                                  const TCHAR *str )
 {
-  SIZE  size      = {0, 0};
-  int   icon_size = 0;
+  SIZE        size      = {0, 0};
+  int         icon_size = 0;
+  ICONICON2  *lines;
+
+  lines = &mi_lines[idx];
 
   if ( str )
     {
@@ -296,18 +315,23 @@ int iDirectoryView::SetMiiSubRect( HDC hDC, ICONICON2 *lines, int x, int cy, WOR
 int iDirectoryView::SetMiRect( HDC hDC, int width, int cx, int cy )
 {
   SHFILEINFO  shfi;
-  TCHAR       tmp[ MAX_PATH ];
+  TCHAR      *tmp;
   TCHAR*      cp;
-  int         x = 0;
+  int         x = 8;
   int         i;
   int         j;
   int         len;
+  int         top;
   TCHAR*      context;
   iico        ico(hDC, IMG_DIRVIEW);
 
-  cx -= 48;
+  cx -= 72;
 
-  _tcscpy_s( tmp, MAX_PATH, m_directory );
+  len = (int)_tcslen(m_directory) + 1;
+
+  tmp = (TCHAR *)malloc(len * sizeof(TCHAR));
+
+  _tcscpy_s( tmp, len, m_directory );
 
   for (i = 0; i < TB_MAX_LINE; i++)
     {
@@ -319,18 +343,22 @@ int iDirectoryView::SetMiRect( HDC hDC, int width, int cx, int cy )
   mi_lines[ 2 ].index = POP_FOLDER;
   mi_lines[ 3 ].index = BREAK_LINE;
   mi_lines[ 4 ].index = UP_FOLDER;
+  mi_lines[ 5 ].index = NONE_LINE;
 
-  x = SetMiiSubRect( hDC, &mi_lines[ 0 ], x, cy, IDIRECTORYID_BACK, OFFSET_OFFSET );
-  x = SetMiiSubRect( hDC, &mi_lines[ 1 ], x, cy, IDIRECTORYID_NULL );
-  x = SetMiiSubRect( hDC, &mi_lines[ 2 ], x, cy, IDIRECTORYID_STEP, OFFSET_OFFSET );
-  x = SetMiiSubRect( hDC, &mi_lines[ 3 ], x, cy, IDIRECTORYID_DOWN );
-  x = SetMiiSubRect( hDC, &mi_lines[ 4 ], x, cy, IDIRECTORYID_L_FOLDER, OFFSET_OFFSET );
+  x = SetMiiSubRect( hDC, 0, x, cy, IDIRECTORYID_BACK,     OFFSET_OFFSET );
+  x = SetMiiSubRect( hDC, 1, x, cy, IDIRECTORYID_NULL );
+  x = SetMiiSubRect( hDC, 2, x, cy, IDIRECTORYID_STEP,     OFFSET_OFFSET );
+  x = SetMiiSubRect( hDC, 3, x, cy, IDIRECTORYID_DOWN );
+  x = SetMiiSubRect( hDC, 4, x, cy, IDIRECTORYID_L_FOLDER, OFFSET_OFFSET );
+  x = SetMiiSubRect( hDC, 5, x, cy, IDIRECTORYID_NULL );
 
   _tcscpy_s( mi_lines[ 4 ].folder, MAX_PATH, _T( ".." ) );
 
-  for ( i = 5, cp = _tcstok_s( tmp, L"\\", &context ); cp; cp = _tcstok_s( NULL, L"\\", &context ) )
+  top = 6;
+
+  for ( i = top, cp = _tcstok_s( tmp, L"\\", &context ); cp; cp = _tcstok_s( NULL, L"\\", &context ) )
     {
-      if ( i == 5 )
+      if ( i == top )
         {
           mi_lines[ i ].index  = NONE_LINE;
         }
@@ -339,12 +367,12 @@ int iDirectoryView::SetMiRect( HDC hDC, int width, int cx, int cy )
           mi_lines[ i ].index  = BREAK_ARROW;
         }
 
-      x = SetMiiSubRect( hDC, &mi_lines[ i ], x, cy, IDIRECTORYID_NULL );
+      x = SetMiiSubRect( hDC, i, x, cy, IDIRECTORYID_NULL );
       i++;
 
       mi_lines[ i ].handle = HENABLE;
 
-      if ( i == 6 )
+      if ( i == top + 1 )
         {
           if ( PathIsUNC( m_directory ) )
             {
@@ -366,7 +394,7 @@ int iDirectoryView::SetMiRect( HDC hDC, int width, int cx, int cy )
           ::PathAppend( mi_lines[ i ].folder, cp );
         }
 
-      x = SetMiiSubRect( hDC, &mi_lines[ i ], x, cy, IDIRECTORYID_L_FOLDER, OFFSET_OFFSET, cp );
+      x = SetMiiSubRect( hDC, i, x, cy, IDIRECTORYID_L_FOLDER, OFFSET_OFFSET, cp );
       i++;
     }
 
@@ -379,7 +407,7 @@ int iDirectoryView::SetMiRect( HDC hDC, int width, int cx, int cy )
       mi_lines[ i ].index  = BREAK_LINE;
     }
 
-  x = SetMiiSubRect( hDC, &mi_lines[ i ], x, cy, IDIRECTORYID_NULL );
+  x = SetMiiSubRect( hDC, i, x, cy, IDIRECTORYID_NULL );
   i++;
 
   for ( ; i < TB_MAX_LINE - 1; i++ )
@@ -389,55 +417,57 @@ int iDirectoryView::SetMiRect( HDC hDC, int width, int cx, int cy )
 
   if ( m_enable )
     {
-      for ( i = 6, len = 0; i < TB_MAX_LINE - 1; i += 2 )
+      for ( i = top + 1, len = 0; i < TB_MAX_LINE - 1; i += 2 )
         {
           if ( mi_lines[ i + 2 ].handle == NULL || cx > ( x - len ) )
             {
               break;
             }
 
-          len = mi_lines[ i ].rc.right - mi_lines[ 5 ].rc.left;
+          len = mi_lines[ i ].rc.right - mi_lines[ top ].rc.left;
         }
 
       if ( len > 0 )
         {
           for ( i--, j = 0; i < TB_MAX_LINE; i++, j++ )
             {
-              mi_lines[ j + 5 ] = mi_lines[ i ];
+              mi_lines[ j + top ] = mi_lines[ i ];
 
-              if ( mi_lines[ j + 5 ].handle != NULL )
+              if ( mi_lines[ j + top ].handle != NULL )
                 {
-                  mi_lines[ j + 5 ].rc.left  -= len;
-                  mi_lines[ j + 5 ].rc.right -= len;
+                  mi_lines[ j + top ].rc.left  -= len;
+                  mi_lines[ j + top ].rc.right -= len;
                 }
             }
 
-          mi_lines[ 5 ].index  = BACK_ARROW;
+          mi_lines[ top ].index  = BACK_ARROW;
         }
     }
   else
     {
-      for ( i = 6, len = 0; i < TB_MAX_LINE - 1; i += 2 )
+      for ( i = top + 1, len = 0; i < TB_MAX_LINE - 1; i += 2 )
         {
-          if ( mi_lines[ i + 2 ].handle == NULL || cx > ( x - len - mi_lines[ 5 ].rc.right ) )
+          if ( mi_lines[ i + 2 ].handle == NULL || cx > ( x - len - mi_lines[ top ].rc.right ) )
             {
               break;
             }
 
-          len = mi_lines[ i ].rc.right - mi_lines[ 5 ].rc.left;
+          len = mi_lines[ i ].rc.right - mi_lines[ top ].rc.left;
         }
 
       for ( i--, j = 0; i < TB_MAX_LINE; i++, j++ )
         {
-          mi_lines[ j + 5 ] = mi_lines[ i ];
+          mi_lines[ j + top ] = mi_lines[ i ];
 
-          if ( mi_lines[ j + 5 ].handle != NULL )
+          if ( mi_lines[ j + top ].handle != NULL )
             {
-              mi_lines[ j + 5 ].rc.left  -= len;
-              mi_lines[ j + 5 ].rc.right -= len;
+              mi_lines[ j + top ].rc.left  -= len;
+              mi_lines[ j + top ].rc.right -= len;
             }
         }
     }
+
+  free(tmp);
 
   return 1;
 }

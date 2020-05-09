@@ -40,7 +40,9 @@ public:
 
 public:
   void SetTop( BOOL isTop );
-  void SetStepBackAndUpFocus( BOOL step_enable = TRUE,  BOOL back_enable = TRUE,  BOOL up_enable = TRUE );
+  void SetStepBackAndUpFocus(BOOL step_enable = TRUE,
+                             BOOL back_enable = TRUE,
+                             BOOL up_enable   = TRUE);
 
 public:
   virtual void    Draw( HWND hWnd, HDC hDC, int x, int y, int cx, int cy );
@@ -62,23 +64,29 @@ public:
 
 private:
   int   SetMiRect( HDC hDC, int width, int cx, int cy );
-  int   SetMiiSubRect( HDC hDC, ICONICON2 *lines, int x, int cy, WORD id, int offset = 0, const TCHAR *str = NULL );
+  int   SetMiiSubRect(HDC          hDC,
+                      int          idx,
+                      int          x,
+                      int          cy,
+                      WORD         id,
+                      int          offset = 0,
+                      const TCHAR *str    = NULL );
   void  DrawMain( HDC hDC, int id, int width, int height, BOOL active = TRUE );
   void  DrawMain2( HDC hDC, int width );
   int   GetToolActionID( int x, int y );
 
 protected:
-  int     m_action;
-  TCHAR   m_directory[ MAX_PATH ];
-  int     m_prev_id;
-  int     m_d_cnt;
+  int   m_action;
+  TCHAR m_directory[ MAX_PATH ];
+  int   m_prev_id;
+  int   m_d_cnt;
 
 protected:
-  BOOL    m_enable;
-  BOOL    mIsTop;
-  BOOL    m_step_enable;
-  BOOL    m_back_enable;
-  BOOL    m_up_enable;
+  BOOL  m_enable;
+  BOOL  mIsTop;
+  BOOL  m_step_enable;
+  BOOL  m_back_enable;
+  BOOL  m_up_enable;
 
 };
 // --------------------------------------------------------------------------

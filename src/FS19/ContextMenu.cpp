@@ -38,10 +38,29 @@ void ContextMenu( HWND hWnd, int x, int y, TCHAR dir[], const TCHAR name[] )
   LPITEMIDLIST        pID3     = NULL;
   HMENU               hMenu    = NULL;
   CMINVOKECOMMANDINFO cmi;
-  OLECHAR             olePath[ MAX_PATH ];
+  OLECHAR            *olePath  = NULL;
   ULONG               size;
   ULONG               attr = 0;
   int                 cmd;
+  size_t              len_dir;
+  size_t              len_name;
+  size_t              len;
+
+  len_dir  = _tcslen(dir) + 1;
+  len_name = _tcslen(name) + 1;
+
+  if (len_dir > len_name)
+    {
+      len = len_dir;
+    }
+  else
+    {
+      len = len_name;
+    }
+
+  olePath = (OLECHAR *)malloc(len * sizeof(len));
+
+  assert(olePath);
 
   if ( ::SHGetMalloc( &pMalloc ) != NOERROR )
     {
@@ -54,9 +73,9 @@ void ContextMenu( HWND hWnd, int x, int y, TCHAR dir[], const TCHAR name[] )
     }
 
 #ifndef UNICODE
-  MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED, dir, -1, olePath, MAX_PATH );
+  MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED, dir, -1, olePath, len );
 #else
-  _tcscpy_s( olePath, MAX_PATH, dir );
+  _tcscpy_s( olePath, len, dir );
 #endif
 
   if ( FAILED( pDesktop->ParseDisplayName( hWnd, NULL, olePath, &size, &pID1, &attr ) ) )
@@ -89,9 +108,9 @@ void ContextMenu( HWND hWnd, int x, int y, TCHAR dir[], const TCHAR name[] )
         }
 
 #ifndef UNICODE
-      MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED, name, -1, olePath, MAX_PATH );
+      MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED, name, -1, olePath, len );
 #else
-      _tcscpy_s( olePath, MAX_PATH, name );
+      _tcscpy_s( olePath, len, name );
 #endif
       if ( FAILED( pFolder->ParseDisplayName( hWnd, NULL, olePath, &size, &pID2, &attr ) ) )
         {
@@ -139,17 +158,18 @@ void ContextMenu( HWND hWnd, int x, int y, TCHAR dir[], const TCHAR name[] )
     }
 
 _EXIT_:
-  if( pMenu )    pMenu->Release();
-  if( pMenu2 )   pMenu2->Release();
-  if( pFolder )  pFolder->Release();
-  if( pDesktop ) pDesktop->Release();
-  if( hMenu )    DestroyMenu( hMenu );
+  if(olePath)  free(olePath);
+  if(pMenu)    pMenu->Release();
+  if(pMenu2)   pMenu2->Release();
+  if(pFolder)  pFolder->Release();
+  if(pDesktop) pDesktop->Release();
+  if(hMenu)    DestroyMenu(hMenu);
 
-  if ( pMalloc )
+  if (pMalloc)
     {
-      if( pID1 ) pMalloc->Free( pID1 );
-      if( pID2 ) pMalloc->Free( pID2 );
-      if( pID3 ) pMalloc->Free( pID3 );
+      if(pID1) pMalloc->Free(pID1);
+      if(pID2) pMalloc->Free(pID2);
+      if(pID3) pMalloc->Free(pID3);
 
       pMalloc->Release();
     }
@@ -187,10 +207,11 @@ void ContextMenu( HWND hWnd, int x, int y, TCHAR dir[], TCHAR* names[], int cnt 
   LPITEMIDLIST*       pList    = NULL;
   HMENU               hMenu = NULL;
   CMINVOKECOMMANDINFO cmi;
-  OLECHAR             olePath[ MAX_PATH ];
+  OLECHAR            *olePath;
   ULONG               size;
   ULONG               attr = 0;
   int                 cmd;
+  size_t              len;
 
   if ( ::SHGetMalloc( &pMalloc ) != NOERROR )
     {
@@ -202,10 +223,14 @@ void ContextMenu( HWND hWnd, int x, int y, TCHAR dir[], TCHAR* names[], int cnt 
       goto _EXIT_;
     }
 
+  len = _tcslen(dir) + 1;
+
+  olePath = (OLECHAR *)malloc(len * sizeof(len));
+
 #ifndef UNICODE
-  MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED, dir, -1, olePath, MAX_PATH );
+  MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED, dir, -1, olePath, len );
 #else
-  _tcscpy_s( olePath, MAX_PATH, dir );
+  _tcscpy_s( olePath, len, dir );
 #endif
 
   if ( FAILED( pDesktop->ParseDisplayName( hWnd, NULL, olePath, &size, &pID1, &attr ) ) )
