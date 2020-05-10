@@ -59,7 +59,7 @@ BOOL iMkDirDlg::OnInitDialog( HWND hwndFocus, LPARAM lParam )
 
   mStatic.SetFont( *mpFont );
   mStatic.Attach( GetDlgItem( IDC_STATIC2 ) );
-  mStatic.SetText( _T( "□ Create a directory" ) );
+  mStatic.SetText( _T( "Create a directory" ) );
 
   return 0;
 }
@@ -101,12 +101,12 @@ void iMkDirDlg::OnCommand( int id, HWND hwndCtl, UINT codeNotify )
 
         if ( m_mode == 0 )
           {
-            mStatic.SetText( _T( "□ Create a directory" ) );
+            mStatic.SetText( _T( "Create a directory" ) );
             m_mode = 1;
           }
         else
           {
-            mStatic.SetText( _T( "■ Create a file" ) );
+            mStatic.SetText( _T( "Create a file" ) );
             m_mode = 0;
           }
         break;

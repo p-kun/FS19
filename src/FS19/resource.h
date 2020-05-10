@@ -5,7 +5,6 @@
 #define IDC_MYICON                      2
 #define IDD_FS19_DIALOG                 102
 #define IDS_APP_TITLE                   103
-#define IDD_ABOUTBOX                    103
 #define IDM_ABOUT                       104
 #define IDM_EXIT                        105
 #define IDI_FS19                        107
@@ -17,9 +16,6 @@
 #define IDC_COMBO2                      1001
 #define IDC_LIST1                       1001
 #define IDC_COMBO3                      1002
-#define IDC_INS                         1002
-#define IDC_LIST2                       1002
-#define IDC_DEL                         1003
 #define IDC_EDIT1                       1004
 #define IDC_EDIT2                       1005
 #define IDC_EDIT3                       1006
@@ -37,8 +33,6 @@
 #define IDC_BUTTON3                     1010
 #define IDC_CHECK5                      1011
 #define IDC_BUTTON4                     1011
-#define IDC_BUTTON_ADD                  1019
-#define IDC_BUTTON_SELECT               1020
 #define MENUID_FONT1                    40002
 #define MENUID_SYS_ICON                 40004
 #define MENUID_DELETE                   40019

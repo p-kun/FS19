@@ -377,18 +377,17 @@ void iInfoView::SetMiRect( HDC hDC, int width, int cx, int cy )
   int   x = OFFSET_TOP;
   int   i = 0;
 
-  x = SetElement( hDC, i++, x, cy, ISHORTCUTID_PAST, L"ペースト" );
-  x = SetElement( hDC, i++, x, cy, ISHORTCUTID_COPY, L"コピー" );
-  x = SetElement( hDC, i++, x, cy, ISHORTCUTID_DELETE, L"消去" );
-  x = SetElement( hDC, i++, x, cy, ISHORTCUTID_RENAME, L"名前の変更" );
+  x = SetElement( hDC, i++, x, cy, ISHORTCUTID_PAST, L"Paste" );
+  x = SetElement( hDC, i++, x, cy, ISHORTCUTID_COPY, L"Copy" );
+  x = SetElement( hDC, i++, x, cy, ISHORTCUTID_DELETE, L"Erase" );
+  x = SetElement( hDC, i++, x, cy, ISHORTCUTID_RENAME, L"Rename" );
   x = SetElement( hDC, i++, x, cy, ISHORTCUTID_NULL );
-  x = SetElement( hDC, i++, x, cy, ISHORTCUTID_REFRESH, L"更新" );
-  x = SetElement( hDC, i++, x, cy, ISHORTCUTID_PROPERTIES, L"プロパティ"  );
+  x = SetElement( hDC, i++, x, cy, ISHORTCUTID_REFRESH, L"Update" );
+  x = SetElement( hDC, i++, x, cy, ISHORTCUTID_PROPERTIES, L"Property" );
   x = SetElement( hDC, i++, x, cy, ISHORTCUTID_NULL );
-  x = SetElement( hDC, i++, x, cy, ISHORTCUTID_EJECT, L"取り出し" );
+  x = SetElement( hDC, i++, x, cy, ISHORTCUTID_EJECT, L"Take out" );
   x = SetElement( hDC, i++, x, cy, ISHORTCUTID_NULL );
-  x = SetElement( hDC, i++, x, cy, ISHORTCUTID_SETTING, L"設定.."  );
-
+  x = SetElement( hDC, i++, x, cy, ISHORTCUTID_SETTING, L"Configuration.."  );
 }
 // --------------------------------------------------------------------------
 
@@ -516,7 +515,7 @@ void iInfoView::MakeFileInfo( dirent *entry )
   DWORD         poi;
   DWORD         mod;
 
-  /* ファイルサイズを他を作成 */
+  /* Create other file size */
 
   FileTimeToLocalFileTime( &entry->ftLastWriteTime, &local );
   FileTimeToSystemTime( &local, &st );

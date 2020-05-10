@@ -1455,7 +1455,7 @@ void iSeachView::SetCurrentLine( int *target, int no )
   xBmpDC  bmp;
   struct {
     int   no;
-    DWORD bm;   /* ブックマークを参照するときは０ */
+    DWORD bm;   /* 0 to browse bookmarks */
   }
   lines[ 6 ];
 
@@ -1623,7 +1623,7 @@ void iSeachView::Enter( BOOL dblclk )
 
                   if ( !PathFileExists( buf ) )
                     {
-                      if ( ::MessageBox( mhWnd, _T( "フォルダがありません。作りますか？" ), _T( "どうする？" ), MB_YESNO | MB_ICONQUESTION | MB_DEFBUTTON2 ) == IDNO )
+                      if ( ::MessageBox( mhWnd, _T( "There is no folder. Do you make it?" ), _T( "What are you doing?" ), MB_YESNO | MB_ICONQUESTION | MB_DEFBUTTON2 ) == IDNO )
                         {
                           break;
                         }
@@ -1668,7 +1668,7 @@ BOOL iSeachView::SetDirectory2( const TCHAR *d_name, const TCHAR *prev_name, int
         {
           if ( m_namelist )
             {
-              /* リフレッシュ */
+              /* Refresh */
 
               current = m_current1;
 
@@ -1733,7 +1733,7 @@ BOOL iSeachView::BackSpase( void )
     {
       if ( !::PathIsRoot( m_dir ) )
         {
-          /* ルートディレクトリーのときは何もしない */
+          /* Do nothing if it is the root directory */
 
           _tcscpy_s( name, MAX_PATH, m_dir );
           PathRemoveBackslash( name );

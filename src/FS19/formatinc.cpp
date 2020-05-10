@@ -495,12 +495,16 @@ int FormatInc( TCHAR buf[], dirent *entry, int max_len, int str_len, int *str_of
   SYSTEMTIME  st;
   int         res;
   int         len;
-  TCHAR       name[ MAX_PATH ];
+  TCHAR      *name;
 
   FileTimeToLocalFileTime( &entry->ftLastWriteTime, &local );
   FileTimeToSystemTime( &local, &st );
 
-  _tcscpy_s( name, MAX_PATH, entry->d_name );
+  len = (int)_tcslen(entry->d_name) + 1;
+
+  name = (TCHAR *)alloca(len * sizeof(TCHAR));
+
+  _tcscpy_s( name, len, entry->d_name );
 
   path = PathFindFileName( name );
   ext  = PathFindExtension( path );
