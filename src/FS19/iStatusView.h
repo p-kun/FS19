@@ -23,13 +23,13 @@
 
 
 // ==========================================================================
-// -- アプリケーションクラスの作成
+// -- Create an application class
 // --------------------------------------------------------------------------
 class iStATUsViEW : public oneCopy
 {
 public:
   // ======================================================================
-  // -- クラスの構築
+  // -- Class building
   // ----------------------------------------------------------------------
   iStATUsViEW()
   {
@@ -48,7 +48,7 @@ public:
 
 
   // ======================================================================
-  // -- クラスの破棄
+  // -- Class destruction
   // ----------------------------------------------------------------------
   ~iStATUsViEW()
   {
@@ -398,20 +398,42 @@ public:
 
                     if ( result_time >= 3600 )
                       {
-                        wsprintf( m_copy_string, L"コピー中...  残り ---- [%3d.%02d%% %3d.%03dMbps ]", rate / 100, rate % 100, tempTrans / 1024, tempTrans % 1000 );
+                        wsprintf(m_copy_string,
+                                 L"Copying...  remaining ---- [%3d.%02d%% %3d.%03dMbps ]",
+                                 rate / 100,
+                                 rate % 100,
+                                 tempTrans / 1024,
+                                 tempTrans % 1000);
                       }
                     else if( result_time >= 60 )
                       {
-                        wsprintf( m_copy_string, L"コピー中...  残り %2d分 [%3d.%02d%% %3d.%03dMbps ]", result_time / 60 + 1, rate / 100, rate % 100, tempTrans / 1024, tempTrans % 1000 );
+                        wsprintf(m_copy_string,
+                                 L"Copying...  remaining %2d分 [%3d.%02d%% %3d.%03dMbps ]",
+                                 result_time / 60 + 1,
+                                 rate / 100,
+                                 rate % 100,
+                                 tempTrans / 1024,
+                                 tempTrans % 1000);
                       }
                     else
                       {
-                        wsprintf( m_copy_string, L"コピー中...  残り %2d秒 [%3d.%02d%% %3d.%03dMbps ]", result_time, rate / 100, rate % 100, tempTrans / 1024, tempTrans % 1000 );
+                        wsprintf(m_copy_string,
+                                 L"Copying...  remaining %2d秒 [%3d.%02d%% %3d.%03dMbps ]",
+                                 result_time,
+                                 rate / 100,
+                                 rate % 100,
+                                 tempTrans / 1024,
+                                 tempTrans % 1000);
                       }
                   }
                 else
                   {
-                    wsprintf( m_copy_string, L"コピー中... [%3d.%02d%% %3d.%03dMbps ]", rate / 100, rate % 100, tempTrans / 1024, tempTrans % 1000 );
+                    wsprintf(m_copy_string,
+                             L"Copying... [%3d.%02d%% %3d.%03dMbps ]",
+                             rate / 100,
+                             rate % 100,
+                             tempTrans / 1024,
+                             tempTrans % 1000);
                   }
 
                 m_cnt++;
@@ -521,28 +543,28 @@ public:
 
     if ( _act.cancel )
       {
-        ssnprintf( m_copy_string, MAX_STRING, L" キャンセル  %,d/ %,d%\n", comp_cnt, f_total + d_total );
+        ssnprintf( m_copy_string, MAX_STRING, L" Cancel  %,d/ %,d%\n", comp_cnt, f_total + d_total );
       }
     else
       {
         if ( fail_cnt == 0 )
           {
-            ssnprintf( m_copy_string, MAX_STRING, L" 成功  %,d/ %,d", comp_cnt, f_total + d_total );
+            ssnprintf( m_copy_string, MAX_STRING, L" Success  %,d/ %,d", comp_cnt, f_total + d_total );
           }
         else
           {
-            ssnprintf( m_copy_string, MAX_STRING, L" 成功  %,d/ %,d   失敗  %,d/ %,d", comp_cnt, f_total + d_total, fail_cnt, f_total + d_total );
+            ssnprintf( m_copy_string, MAX_STRING, L" Success  %,d/ %,d   Failure  %,d/ %,d", comp_cnt, f_total + d_total, fail_cnt, f_total + d_total );
           }
 
         if ( null_not_write_cnt > 0 )
           {
             ssnprintf( m_copy_sub_string, MAX_STRING,
-              L" コピーされないファイルがあります  %,d/ %,d (同名のファイルが存在)", null_not_write_cnt, f_total + d_total );
+              L" Some files are not copied  %,d/ %,d (A file with the same name exists)", null_not_write_cnt, f_total + d_total );
           }
         else if ( date_not_write_cnt > 0 )
           {
             ssnprintf( m_copy_sub_string, MAX_STRING,
-              L" コピーされないファイルがあります  %,d/ %,d (コピー先のファイルが新しい)", date_not_write_cnt, f_total + d_total );
+              L" Some files are not copied  %,d/ %,d (The copy destination file is new)", date_not_write_cnt, f_total + d_total );
           }
       }
 
@@ -577,15 +599,15 @@ public:
 
         if ( marked > 0 )
           {
-            ssnprintf( m_string, MAX_STRING, L" %,d 個の項目  %,d 個の選択 ", total, marked );
-            ssnprintf( m_sub_string, MAX_STRING, L" %,d 個のファイル  %,d 個のフォルダー  %s バイトの合計ファイルサイズ",
+            ssnprintf( m_string, MAX_STRING, L" %,d item(s)  %,d choice(s) ", total, marked );
+            ssnprintf( m_sub_string, MAX_STRING, L" %,d file(s)  %,d folder(s)  Total file size is %s bytes",
               marked_f_cnt, marked_d_cnt, SizeToStr( marked_f_size->QuadPart, buf ) );
             
           }
         else
           {
-            ssnprintf( m_string, MAX_STRING, L" %,d 個の項目 ", total );
-            ssnprintf( m_sub_string, MAX_STRING, L" %,d 個のファイル  %,d 個のフォルダー  %s バイトの合計ファイルサイズ",
+            ssnprintf( m_string, MAX_STRING, L" %,d item(s) ", total );
+            ssnprintf( m_sub_string, MAX_STRING, L" %,d file(s)  %,d folder(s)  Total file size is %s bytes",
               f_cnt, d_cnt, SizeToStr( f_size->QuadPart, buf ) );
           }
       }
@@ -601,7 +623,7 @@ public:
 
 
   // ==========================================================================
-  // -- ドライブ容量を文字列へ
+  // -- Drive capacity to string
   // --------------------------------------------------------------------------
   TCHAR *SizeToStr( ULONGLONG size, TCHAR *pBuf )
   {
@@ -611,7 +633,7 @@ public:
     DWORD         poi;
     DWORD         mod;
 
-    /* ファイル総表示のフォーマット */
+    /* File total display format */
 
     while ( tmp >= 100000 )
       {
