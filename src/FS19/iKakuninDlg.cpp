@@ -417,9 +417,9 @@ iKakuninDlg::iKakuninDlg( HWND hParent ) : xDialog( _T( "IDD_KAKUNINN" ), hParen
   mpButton3 = new xButton;
   selected  = 0;
   thatsall  = FALSE;
-  mFraem_cy = GetSystemMetrics( SM_CYSIZEFRAME ) +
-              GetSystemMetrics( SM_CYCAPTION )   +
-              GetSystemMetrics( SM_CYSIZEFRAME );
+  mFraem_cy = GetSystemMetrics( SM_CYSIZEFRAME )
+            + GetSystemMetrics( SM_CYCAPTION )
+            + GetSystemMetrics( SM_CYSIZEFRAME );
 
 }
 // --------------------------------------------------------------------------

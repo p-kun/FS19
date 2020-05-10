@@ -27,7 +27,7 @@ class iTreeView
 {
 private:
   enum {
-    KUN_MAX       = 4000,
+    KUN_MAX       = 18000,
     KUN_OKINI_MAX = 40,
   };
 
@@ -507,7 +507,7 @@ public:
     TCHAR       tmp[ MAX_PATH ];
 
     _tcscpy_s( tmp, MAX_PATH, d_name );
-    PathAppend( tmp, f_name );
+    ::PathAppend( tmp, f_name );
 
     _stprintf_s( drive, _T( "%c:\\" ), _T( 'A' ) + PathGetDriveNumber( d_name ) );
 
@@ -547,16 +547,25 @@ public:
   // ----------------------------------------------------------------------
   int checkunderdir( const TCHAR *cur_dir, const TCHAR *f_name )
   {
-    HANDLE    hFile;
-    FIND_DATA fd;
-    TCHAR     temp[ MAX_PATH ];
-    int       d_cnt = 0;
-    int       f_cnt = 0;
+    HANDLE        hFile;
+    FIND_DATA     fd;
+    TCHAR        *temp;
+    int           d_cnt = 0;
+    int           f_cnt = 0;
+    const TCHAR  *card  = L"*";
+    size_t        len;
 
-    _tcscpy_s( temp, MAX_PATH, cur_dir );
+    len = 1 + _tcslen(cur_dir)
+        + 1 + _tcslen(f_name)
+        + 1 + _tcslen(card)
+        + 1;  /* '\0' */
 
-    PathAppend( temp, f_name );
-    PathAppend( temp, _T( "*" ) );
+    temp = (TCHAR *)alloca(len * sizeof(TCHAR));
+
+    _tcscpy_s( temp, len, cur_dir );
+
+    ::PathAppend( temp, f_name );
+    ::PathAppend( temp, card );
 
     hFile = ::FindFirstFile( temp, &fd );
 
@@ -596,24 +605,32 @@ public:
   // ----------------------------------------------------------------------
   int readdir( const TCHAR *cur_dir, int depth, int cur )
   {
-    HANDLE    hFile;
-    FIND_DATA fd;
-    TCHAR     temp[ MAX_PATH ];
-    int       err = 0;
-    int       i;
-    int       no = cur;
-    int       f_counter = 0;
-    int       d_counter = 0;
-    int       d_sub;
+    HANDLE        hFile;
+    FIND_DATA     fd;
+    TCHAR        *temp;
+    int           err = 0;
+    int           i;
+    int           no = cur;
+    int           f_counter = 0;
+    int           d_counter = 0;
+    int           d_sub;
+    const TCHAR  *card  = L"*";
+    size_t        len;
 
     if ( !CheckPath( cur_dir, 4, mhWnd, 1 ) )
       {
         return 0;
       }
 
-    _tcscpy_s( temp, MAX_PATH, cur_dir );
+    len = 1 + _tcslen(cur_dir)
+        + 1 + _tcslen(card)
+        + 1;  /* '\0' */
 
-    PathAppend( temp, _T( "*" ) );
+    temp = (TCHAR *)alloca(len * sizeof(TCHAR));
+
+    _tcscpy_s( temp, len, cur_dir );
+
+    ::PathAppend( temp, card );
 
     hFile = ::FindFirstFile( temp, &fd );
 
@@ -737,7 +754,7 @@ public:
         depth = mp_kun->list[ cur ].depth;
 
         _tcscpy_s( buf, MAX_PATH, mp_kun->list[ cur ].d_name );
-        PathAppend( buf, last_buf );
+        ::PathAppend( buf, last_buf );
         _tcscpy_s( last_buf, MAX_PATH, buf );
 
         while ( cur > 0 )
@@ -976,10 +993,8 @@ public:
   // --------------------------------------------------------------------------
   BOOL SetCurrentPath( TCHAR *d_name_org )
   {
-    TCHAR*  cp;
-    TCHAR   buf[ MAX_PATH ];
-    TCHAR*  tmp;
-    TCHAR   d_name[ MAX_PATH ];
+    TCHAR  *cp;
+    TCHAR  *d_name;
     TCHAR   drive[ 8 ];
     BOOL    res = TRUE;
     int     i = 0;
@@ -989,7 +1004,13 @@ public:
     size_t  len1;
     size_t  len2 = 0;
 
-    _tcscpy_s( d_name, MAX_PATH, d_name_org );
+    len1 = 1 + _tcslen(d_name_org)
+         + 1   /* '\\' */
+         + 1;  /* '\0' */
+
+    d_name = (TCHAR *)alloca(len1 * sizeof(TCHAR));
+
+    _tcscpy_s( d_name, len1, d_name_org );
 
     PathAddBackslash( d_name );
 
@@ -999,6 +1020,11 @@ public:
       }
 
     len1 = _tcslen( d_name );
+
+    if ( len1 == 0 )
+      {
+        return res;
+      }
 
     if ( PathIsUNC( d_name ) )
       {
@@ -1052,9 +1078,16 @@ public:
         return res;
       }
 
+    TCHAR *buf;
+    TCHAR *tmp;
+
+    len1 = 1 + _tcslen(d_name) + 1 /* '\0'*/;
+
+    buf = (TCHAR *)alloca(len1 * sizeof(TCHAR));
+
     for ( cp = PathFindNextComponent( d_name + len2 ), depth = 0; cp; cp = PathFindNextComponent( cp ), depth++ )
       {
-        _tcsncpy_s( buf, MAX_PATH, d_name, cp - d_name );
+        _tcsncpy_s( buf, len1, d_name, cp - d_name );
 
         if ( !PathIsDirectory( buf ) )
           {
