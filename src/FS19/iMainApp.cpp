@@ -1256,10 +1256,7 @@ int iMainApp::ReadClip()
 
   err = _tfopen_s(&fp, tmp, _T( "w" ) );
 
-  if ( err == 0 )
-    {
-    }
-  else
+  if ( err )
     {
       for ( entry = top_entry; entry; entry = entry->next )
         {
@@ -1285,6 +1282,7 @@ int iMainApp::ReadClip()
               _ftprintf( fp, L"\"%s\" \"%s\"\n", entry->d_name, buf );
             }
         }
+
       fclose( fp );
     }
 
