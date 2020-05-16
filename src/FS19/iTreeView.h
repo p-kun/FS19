@@ -549,23 +549,14 @@ public:
   {
     HANDLE        hFile;
     FIND_DATA     fd;
-    TCHAR        *temp;
+    TCHAR     temp[ MAX_PATH ];
     int           d_cnt = 0;
     int           f_cnt = 0;
-    const TCHAR  *card  = L"*";
-    size_t        len;
 
-    len = 1 + _tcslen(cur_dir)
-        + 1 + _tcslen(f_name)
-        + 1 + _tcslen(card)
-        + 1;  /* '\0' */
-
-    temp = (TCHAR *)alloca(len * sizeof(TCHAR));
-
-    _tcscpy_s( temp, len, cur_dir );
+    _tcscpy_s( temp, MAX_PATH, cur_dir );
 
     ::PathAppend( temp, f_name );
-    ::PathAppend( temp, card );
+    ::PathAppend( temp, _T( "*" ) );
 
     hFile = ::FindFirstFile( temp, &fd );
 
@@ -607,30 +598,22 @@ public:
   {
     HANDLE        hFile;
     FIND_DATA     fd;
-    TCHAR        *temp;
+    TCHAR     temp[ MAX_PATH ];
     int           err = 0;
     int           i;
     int           no = cur;
     int           f_counter = 0;
     int           d_counter = 0;
     int           d_sub;
-    const TCHAR  *card  = L"*";
-    size_t        len;
 
     if ( !CheckPath( cur_dir, 4, mhWnd, 1 ) )
       {
         return 0;
       }
 
-    len = 1 + _tcslen(cur_dir)
-        + 1 + _tcslen(card)
-        + 1;  /* '\0' */
+    _tcscpy_s( temp, MAX_PATH, cur_dir );
 
-    temp = (TCHAR *)alloca(len * sizeof(TCHAR));
-
-    _tcscpy_s( temp, len, cur_dir );
-
-    ::PathAppend( temp, card );
+    ::PathAppend( temp, _T( "*" ) );
 
     hFile = ::FindFirstFile( temp, &fd );
 
@@ -994,7 +977,9 @@ public:
   BOOL SetCurrentPath( TCHAR *d_name_org )
   {
     TCHAR  *cp;
-    TCHAR  *d_name;
+    TCHAR   buf[ MAX_PATH ];
+    TCHAR*  tmp;
+    TCHAR   d_name[ MAX_PATH ];
     TCHAR   drive[ 8 ];
     BOOL    res = TRUE;
     int     i = 0;
@@ -1004,13 +989,7 @@ public:
     size_t  len1;
     size_t  len2 = 0;
 
-    len1 = 1 + _tcslen(d_name_org)
-         + 1   /* '\\' */
-         + 1;  /* '\0' */
-
-    d_name = (TCHAR *)alloca(len1 * sizeof(TCHAR));
-
-    _tcscpy_s( d_name, len1, d_name_org );
+    _tcscpy_s( d_name, MAX_PATH, d_name_org );
 
     PathAddBackslash( d_name );
 
@@ -1020,11 +999,6 @@ public:
       }
 
     len1 = _tcslen( d_name );
-
-    if ( len1 == 0 )
-      {
-        return res;
-      }
 
     if ( PathIsUNC( d_name ) )
       {
@@ -1078,16 +1052,9 @@ public:
         return res;
       }
 
-    TCHAR *buf;
-    TCHAR *tmp;
-
-    len1 = 1 + _tcslen(d_name) + 1 /* '\0'*/;
-
-    buf = (TCHAR *)alloca(len1 * sizeof(TCHAR));
-
     for ( cp = PathFindNextComponent( d_name + len2 ), depth = 0; cp; cp = PathFindNextComponent( cp ), depth++ )
       {
-        _tcsncpy_s( buf, len1, d_name, cp - d_name );
+        _tcsncpy_s( buf, MAX_PATH, d_name, cp - d_name );
 
         if ( !PathIsDirectory( buf ) )
           {
