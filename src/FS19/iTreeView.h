@@ -76,7 +76,6 @@ public:
 
     SetFavorites();
     SetRoot();
-    GetEnableDrive();
 
     m_cur = m_top = m_line = 0;
 
@@ -1298,52 +1297,55 @@ public:
   // --------------------------------------------------------------------------
   void SetRoot( void )
   {
-    TCHAR   buf[ MAX_PATH ];
-    TCHAR   drv[ 8 ];
-    TCHAR*  cp;
-    int     i = mp_kun->count;
-    DWORD   drives = 0;
-    TCHAR   net_path[ MAX_PATH ];
-    DWORD   length = MAX_PATH;
+    DWORD   i,
+            d,
+            bit = 0;
+    TCHAR   cp[ 8 ];
+    UINT    res;
 
-    GetLogicalDriveStrings( MAX_PATH, buf );      // -- ドライブの一覧取得
+    d = ::GetLogicalDrives();
 
-    for ( cp = buf; *cp != _T( '\0' ); cp += ( _tcslen( cp ) + 1 ) )
+    for( i = 0; i < 32; i++ )
       {
-        drv[ 0 ] = cp[ 0 ];
-        drv[ 1 ] = cp[ 1 ];
-        drv[ 2 ] = '\0';
-
-        if( WNetGetConnection( drv, net_path, &length ) != NO_ERROR )
+        if ( !( ( 1 << i ) & d ) )
           {
-            if ( !PathFileExists( cp ) )
-              {
-                continue;
-              }
+            continue;
           }
 
-        mp_kun->count++;
-        mp_kun->list[ i ].depth  = 0;
-        mp_kun->list[ i ].total  = -1;
-        mp_kun->list[ i ].d_cnt  = -1;
-        mp_kun->list[ i ].d_name = malloc_entry( cp );
+        cp[ 0 ] = L'A' + ( TCHAR )i;
+        cp[ 1 ] = L':';
+        cp[ 2 ] = L'\\';
+        cp[ 3 ] = L'\0';  
+  
+        res = GetDriveType( cp );
 
-        if( GetDriveType( cp ) == DRIVE_FIXED )
+        if( res == DRIVE_REMOTE )
           {
-            mp_kun->list[ i ].d_sub = checkunderdir( cp, L"" );
+            continue;
+          }
+
+        int idx = mp_kun->count++;
+
+        mp_kun->list[ idx ].depth  = 0;
+        mp_kun->list[ idx ].total  = -1;
+        mp_kun->list[ idx ].d_cnt  = -1;
+        mp_kun->list[ idx ].d_name = malloc_entry( cp );
+
+        if( res == DRIVE_FIXED )
+          {
+            mp_kun->list[ idx ].d_sub = checkunderdir( cp, L"" );
           }
         else
           {
-            mp_kun->list[ i ].d_sub = 0;
+            mp_kun->list[ idx ].d_sub = 0;
           }
 
-        SetFileInfo( &mp_kun->list[ i ], cp, L"", TRUE );
-        i++;
+        SetFileInfo( &mp_kun->list[ idx ], cp, L"", TRUE );
 
-        drives |= ( 1 << ( cp[ 0 ] - L'A' ) );
+        bit |= (1 << i);
       }
-
-    m_drives = drives;
+  
+    m_drives = bit;
   }
   // --------------------------------------------------------------------------
 
@@ -1438,59 +1440,7 @@ public:
   // --------------------------------------------------------------------------
   DWORD GetEnableDrive( void )
   {
-    DWORD  i,
-           d,
-           bit;
-    TCHAR  buf[ 10 ];
-    TCHAR *net_path;
-    DWORD  length;
-
-    d = ::GetLogicalDrives();
-
-    for( i = 0; i < 32; i++ )
-      {
-        bit = ( 1 << i );
-
-        if ( !( bit & d ) )
-          {
-            continue;
-          }
-
-        buf[ 0 ] = L'A' + ( TCHAR )i;
-        buf[ 1 ] = L':';
-        buf[ 2 ] = L'\0';
-        buf[ 3 ] = L'\0';
-
-        length = 0;
-
-        if (WNetGetConnection(buf, NULL, &length) != ERROR_MORE_DATA)
-          {
-            continue;
-          }
-
-        length++;
-
-        net_path = (TCHAR *)alloca(length * sizeof(TCHAR));
-
-        if (WNetGetConnection(buf, net_path, &length) != NO_ERROR)
-          {
-            continue;
-          }
-
-        buf[ 2 ] = L'\\';
-
-        if ( GetDriveType( buf ) == DRIVE_REMOTE )
-          {
-            continue;
-          }
-
-        if ( !PathFileExists( buf ) )
-          {
-            d = d & ~bit;
-          }
-      }
-
-    return d;
+    return m_drives;
   }
   // --------------------------------------------------------------------------
 

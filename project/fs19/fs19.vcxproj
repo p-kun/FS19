@@ -72,18 +72,18 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\user\products\src\_box\misc;C:\user\products\src\_box;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\src\_box\misc;..\..\src\_box;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\user\products\src\_box;C:\user\products\src\_box\misc;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\src\_box;..\..\src\_box\misc;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\user\products\src\_box\misc;C:\user\products\src\_box;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\src\_box\misc;..\..\src\_box;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
