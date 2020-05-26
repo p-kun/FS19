@@ -25,7 +25,6 @@
 #include "logf.h"
 #include "iPt.h"
 #include "iHistory.h"
-#include "xgit.h"
 #include "iNamelist.h"
 
 /* Private parameters */
@@ -527,13 +526,13 @@ static int Compar0( const dirent **entry1, const dirent **entry2 )
 
   if( res ) return res;
 
-  if (s_kind == INAM_KIND_TIME)
+  if (s_kind == INAM_KIND_SIZE)
     {
       /* File size */
 
       res = sort_size( dir1, dir2 ) * s_order;
     }
-  else if (s_kind == INAM_KIND_SIZE)
+  else if (s_kind == INAM_KIND_TIME)
     {
       /* Date time */
 
@@ -664,40 +663,6 @@ static int D_Filter0(dirent *entry)
 // ==========================================================================
 // -- 
 // --------------------------------------------------------------------------
-static void node_callback(GIT_NODE *g_node)
-{
-  struct _stat  st;
-  D_NODE       *p_node = savedir(g_node->path);
-  DWORD         mk;
-
-  _tstat(g_node->path, &st);
-
-  if ((DWORD)st.st_mtime != g_node->mtime_hi
-   || (DWORD)st.st_ctime != g_node->ctime_hi)
-    {
-      mk = 2;
-    }
-  else
-    {
-      mk = 1;
-    }
-
-  if (p_node)
-    {
-      if (p_node->next)
-        {
-          p_node->next->d_data[0] = mk;
-        }
-
-      p_node->d_data[0] = mk;
-    }
-}
-// --------------------------------------------------------------------------
-
-
-// ==========================================================================
-// -- 
-// --------------------------------------------------------------------------
 int iNamelist::Scandir( const TCHAR dir[], const TCHAR *prev_dir, void *param, int seach_mode )
 {
   int             i;
@@ -773,10 +738,6 @@ int iNamelist::Scandir( const TCHAR dir[], const TCHAR *prev_dir, void *param, i
       filter = Filter0;
       compar = Compar0;
     }
-
-  /* Git index search */
-
-  scan_git_dir(buf, node_callback);
 
   /* Current folder search */
 
