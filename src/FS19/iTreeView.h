@@ -1463,18 +1463,16 @@ public:
 
         length = 0;
 
-        if (WNetGetConnection(buf, NULL, &length) != ERROR_MORE_DATA)
+        if (WNetGetConnection(buf, NULL, &length) == ERROR_MORE_DATA)
           {
-            continue;
-          }
+            length++;
 
-        length++;
+            net_path = (TCHAR *)alloca(length * sizeof(TCHAR));
 
-        net_path = (TCHAR *)alloca(length * sizeof(TCHAR));
-
-        if (WNetGetConnection(buf, net_path, &length) != NO_ERROR)
-          {
-            continue;
+            if (WNetGetConnection(buf, net_path, &length) != NO_ERROR)
+              {
+                continue;
+              }
           }
 
         buf[ 2 ] = L'\\';
