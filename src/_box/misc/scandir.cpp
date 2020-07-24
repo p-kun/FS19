@@ -157,9 +157,11 @@ static dirent *open_sub(HANDLE  hHeap,
   const TCHAR* dir       = top->d_name;
   int          depth     = top->depth + 1;
   dirent*      top_entry = top->next;
-  size_t       max_len   = MAX_PATH + 20;
+  size_t       max_len;
 
   top->d_cnt = 0;
+
+  max_len = sizeof(dirent) + _tcslen(dir) + MAX_PATH;
 
   entry = (dirent *)alloca(sizeof(dirent) + max_len * sizeof(TCHAR));
 
