@@ -388,7 +388,10 @@ static int PumpMessage( HWND hWnd )
         {
           if ( msg.wParam == VK_ESCAPE )
             {
-              if ( ::MessageBox( hWnd, _T( "検索中です。中止しますか？" ), _T( "どうする？" ), MB_YESNO | MB_ICONQUESTION | MB_DEFBUTTON2 ) == IDYES )
+              if ( ::MessageBox( hWnd,
+                                 _T( "Searching. Would you like to cancel?" ),
+                                 _T( "What are you doing?" ),
+                                 MB_YESNO | MB_ICONQUESTION | MB_DEFBUTTON2 ) == IDYES )
                 {
                   res = 1;
                   break;

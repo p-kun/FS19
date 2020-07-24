@@ -1324,7 +1324,7 @@ BOOL iSeachView::Scan( const TCHAR *dir, const TCHAR *prev_dir, int seach_mode, 
   if ( current < 0 )
     {
       const TCHAR *msg = L"\"%s\"\r\n\r\nFolder search has been canceled.\r\n%s";
-            TCHAR *err = LastError();
+      const TCHAR *err = L"";
 
       len = _tcslen(msg) + _tcslen(err) + _tcslen(path) + 1/* Null */;
 
