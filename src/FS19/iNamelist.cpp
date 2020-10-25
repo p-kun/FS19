@@ -636,9 +636,8 @@ static int D_Filter0(dirent *entry)
                 }
             }
 
-          top->hHandle           = d_node->hHandle;
-          top->userData          = d_node->d_no;
-          top->dwFileAttributes |= d_node->attr;
+          top->hHandle  = d_node->hHandle;
+          top->userData = d_node->d_no;
         }
 
       for (; i < entry->d_cnt && top; i++, top = top->next)
