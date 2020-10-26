@@ -36,7 +36,9 @@ typedef struct
 }
 GIT_NODE;
 
-typedef void (*git_node_callback)(GIT_NODE *p_node, void *p_param);
+typedef void (*git_node_callback)(const GIT_NODE *p_node,
+                                  const TCHAR    *root,
+                                  void           *p_param);
 
 /****************************************************************************
  * Public function prototypes

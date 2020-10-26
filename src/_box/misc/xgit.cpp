@@ -45,8 +45,6 @@
  * Pre-processor definitions
  ****************************************************************************/
 
-#define _STAT   struct _stat
-
 /****************************************************************************
  * Private types
  ****************************************************************************/
@@ -176,7 +174,7 @@ static const BYTE *Body( const BYTE *bp, const TCHAR *root, GIT_NODE *g_idx )
 
   /* sha1 size */
 
-  get_dword( &bp );
+  g_idx->size = get_dword( &bp );
 
   /* sha1 */
 
@@ -204,6 +202,7 @@ static const BYTE *Body( const BYTE *bp, const TCHAR *root, GIT_NODE *g_idx )
 
   /* path conv */
 
+#if 0
   _tcscpy_s(g_idx->path, MAX_PATH, root);
 
   _tcscat(g_idx->path, L"/");
@@ -213,6 +212,13 @@ static const BYTE *Body( const BYTE *bp, const TCHAR *root, GIT_NODE *g_idx )
                          -1,
                          g_idx->path + _tcsclen(g_idx->path),
                          MAX_PATH );
+#else
+  ::MultiByteToWideChar( CP_UTF8, 0U,
+                         cc,
+                         -1,
+                         g_idx->path,
+                         MAX_PATH );
+#endif
 
   /* next point */
 
@@ -331,7 +337,10 @@ static HANDLE open_git_index(const TCHAR *input, TCHAR *git_path, size_t size)
 }
 
 /* ------------------------------------------------------------------------ */
-static int scan_git_index(const BYTE *bp, const TCHAR *git_path, git_node_callback cb, void *p_param)
+static int scan_git_index(const BYTE       *bp,
+                          const TCHAR      *git_path,
+                          git_node_callback cb,
+                          void             *p_param)
 {
   int       total = 0;
   DWORD     version;
@@ -352,7 +361,7 @@ static int scan_git_index(const BYTE *bp, const TCHAR *git_path, git_node_callba
 
       if (cb)
         {
-          cb(&g_idx, p_param);
+          cb(&g_idx, git_path, p_param);
         }
     }
 

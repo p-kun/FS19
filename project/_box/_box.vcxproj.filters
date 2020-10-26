@@ -51,6 +51,9 @@
     <ClCompile Include="..\..\src\_box\misc\ssnprintf.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\_box\misc\sha1.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\_box\misc\xgit.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>

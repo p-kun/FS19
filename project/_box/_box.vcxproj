@@ -21,8 +21,10 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\_box\misc\savedir.cpp" />
     <ClCompile Include="..\..\src\_box\misc\scandir.cpp" />
+    <ClCompile Include="..\..\src\_box\misc\sha1.cpp" />
     <ClCompile Include="..\..\src\_box\misc\ssnprintf.cpp" />
     <ClCompile Include="..\..\src\_box\misc\strverscmp.cpp" />
+    <ClCompile Include="..\..\src\_box\misc\xgit.cpp" />
     <ClCompile Include="..\..\src\_box\xControls.cpp" />
     <ClCompile Include="..\..\src\_box\xDcBase.cpp" />
     <ClCompile Include="..\..\src\_box\xDialog.cpp" />
@@ -37,6 +39,7 @@
     <ClInclude Include="..\..\src\_box\misc\scandir.h" />
     <ClInclude Include="..\..\src\_box\misc\ssnprintf.h" />
     <ClInclude Include="..\..\src\_box\misc\strverscmp.h" />
+    <ClInclude Include="..\..\src\_box\misc\xgit.h" />
     <ClInclude Include="..\..\src\_box\xControls.h" />
     <ClInclude Include="..\..\src\_box\xDcBase.h" />
     <ClInclude Include="..\..\src\_box\xDialog.h" />

@@ -21,6 +21,15 @@
  * Pre-processor definitions
  ****************************************************************************/
 
+typedef enum
+{
+  SAVEDIR_INVALID = -1,
+  SAVEDIR_SRCCOPY,
+  SAVEDIR_SRCAND,
+  SAVEDIR_SRCOR,
+}
+SAVEDIR_PATTERN;
+
 /****************************************************************************
  * Public type declarations
  ****************************************************************************/
@@ -30,15 +39,13 @@ typedef struct DIR_NODE_T
   struct DIR_NODE_T*  next;
   struct DIR_NODE_T*  subd;
   struct DIR_NODE_T*  parent;
-  size_t              size;
   DWORD               d_no;
-  DWORD               attr;
   int                 exist;
   unsigned int        htime;
   unsigned int        ltime;
   HANDLE              hHandle;
   HANDLE              hHeap;
-  DWORD               d_data[8];
+  DWORD               usr_data;
   TCHAR               d_name[1];
 }
 D_NODE;
@@ -47,10 +54,14 @@ D_NODE;
  * Public function prototypes
  ****************************************************************************/
 
-void    delete_savedir( void );
-D_NODE* node_search( D_NODE *p_parent, TCHAR *elem );
-D_NODE* savedir( const TCHAR *path );
-D_NODE* savedir( void );
-D_NODE* savedir(D_NODE  *p_node, const TCHAR *path);
+void    delete_savedir(void);
+D_NODE* node_search(D_NODE *p_parent, TCHAR *elem);
+D_NODE* savedir(const TCHAR *path);
+D_NODE* savedir(const TCHAR *path, DWORD user_data, SAVEDIR_PATTERN pat);
+D_NODE *savedir(D_NODE         *p_node,
+                const TCHAR    *path,
+                DWORD           usr_data = 0,
+                SAVEDIR_PATTERN pat      = SAVEDIR_INVALID);
+D_NODE* savedir(void);
 
 #endif // _SAVEDIR_H_

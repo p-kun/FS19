@@ -2,7 +2,9 @@
 #include <Wincrypt.h>
 #include <stdio.h>
 
-DWORD GetSHA1(TCHAR *in_file, BYTE *sha, DWORD sha_len)
+#define BLOG_STRING   32
+
+DWORD GetSHA1(const TCHAR *in_file, BYTE *sha, DWORD sha_len)
 {
   HCRYPTPROV  hProv   = 0;
   HCRYPTHASH  hHash   = 0;
@@ -33,13 +35,13 @@ DWORD GetSHA1(TCHAR *in_file, BYTE *sha, DWORD sha_len)
 
               size = GetFileSize(hFile, NULL);
 
-              bp = (BYTE *)malloc(size + 1024);
+              bp = (BYTE *)malloc(size + BLOG_STRING);
 
               if (bp)
                 {
-                  sprintf((char *)bp, "blob %d", size);
+                  sprintf_s((char *)bp, BLOG_STRING, "blob %d", size);
 
-                  head = strlen((char *)bp) + 1;
+                  head = (DWORD)strlen((char *)bp) + 1;
 
                   ReadFile(hFile, bp + head, size, NULL, 0);
 
@@ -49,9 +51,9 @@ DWORD GetSHA1(TCHAR *in_file, BYTE *sha, DWORD sha_len)
                 }
 
               CloseHandle(hFile);
-            }
 
-          CryptGetHashParam(hHash, HP_HASHVAL, 0, &hashLen, 0);
+              CryptGetHashParam(hHash, HP_HASHVAL, 0, &hashLen, 0);
+            }
 
           if (0 < hashLen && hashLen <= sha_len)
             {

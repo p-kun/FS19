@@ -24,6 +24,7 @@
 #include "iBaseView.h"
 #include "logf.h"
 #include "iPt.h"
+#include "xgit.h"
 #include "iHistory.h"
 #include "iNamelist.h"
 
@@ -31,6 +32,10 @@
 
 static int	s_order = 1;
 static int	s_kind  = INAM_KIND_EXT;
+
+/* Public functions */
+
+extern DWORD GetSHA1(const TCHAR *in_file, BYTE *sha, DWORD sha_len);
 
 // ==========================================================================
 // -- 
@@ -502,8 +507,10 @@ static int Compar0( const dirent **entry1, const dirent **entry2 )
   TCHAR*        nam2 = ( TCHAR* )dir2->d_name;
   TCHAR*        ext1 = ( TCHAR* )PathFindExtension( dir1->d_name );
   TCHAR*        ext2 = ( TCHAR* )PathFindExtension( dir2->d_name );
-  unsigned int  idx1 = dir1->userData >> 24;
-  unsigned int  idx2 = dir2->userData >> 24;
+//unsigned int  idx1 = dir1->userData >> 24;
+//unsigned int  idx2 = dir2->userData >> 24;
+  unsigned int  idx1 = dir1->userData;
+  unsigned int  idx2 = dir2->userData;
 
   /* Directory ".." */
 
@@ -614,7 +621,7 @@ static int D_Filter0(dirent *entry)
         }
 
       entry->hHandle  = d_parent->hHandle;
-      entry->userData = d_parent->d_no;
+      entry->userData = d_parent->usr_data;
 
       for (top = entry->next, i = 0; i < entry->d_cnt && top && i < 1000; i++, top = top->next)
         {
@@ -637,7 +644,7 @@ static int D_Filter0(dirent *entry)
             }
 
           top->hHandle  = d_node->hHandle;
-          top->userData = d_node->d_no;
+          top->userData = d_node->usr_data;
         }
 
       for (; i < entry->d_cnt && top; i++, top = top->next)
@@ -661,6 +668,102 @@ static int D_Filter0(dirent *entry)
 }
 // --------------------------------------------------------------------------
 
+/*--------------------------------------------------------------------------*/
+static bool CheckSHA1(const BYTE *sha_1, const BYTE *sha_2, int sha_len)
+{
+  int   i;
+
+  for (i = 0; i < sha_len; i++)
+    {
+      if (sha_1[i] != sha_2[i])
+        {
+          break;
+        }
+    }
+
+  return (i == sha_len);
+}
+
+/*--------------------------------------------------------------------------*/
+static void clear_sub_dir(D_NODE *node)
+{
+  while (node)
+    {
+      if (node->subd)
+        {
+          node->usr_data = 0;
+
+          clear_sub_dir(node->subd);
+        }
+      else
+        {
+          node->usr_data = 0;
+        }
+
+      node = node->next;
+    }
+}
+
+/*--------------------------------------------------------------------------*/
+void GitNodeCallback(const GIT_NODE *p_node,
+                     const TCHAR    *root,
+                     void           *p_param)
+{
+  struct _stat    buf;
+  SAVEDIR_PATTERN pat = SAVEDIR_INVALID;
+  DWORD           dat = 1;
+  D_NODE         *p_top;
+
+  if (p_param == NULL)
+    {
+      return;
+    }
+
+  p_top = *((D_NODE **)p_param);
+
+  if (p_top == NULL)
+    {
+      p_top = savedir(root);
+
+      if (p_top == NULL)
+        {
+          return;
+        }
+
+      *((D_NODE **)p_param) = p_top;
+
+      ::SetCurrentDirectory(root);
+
+      /*  Clear list */
+
+      clear_sub_dir(p_top);
+    }
+
+  /* Get file timestump */
+
+  _wstat(p_node->path, &buf);
+
+  if (buf.st_mtime != p_node->mtime_hi || buf.st_ctime != p_node->ctime_hi)
+    {
+      BYTE  sha[20];
+      DWORD sha_len;
+
+      sha_len = GetSHA1(p_node->path, sha, sizeof(sha));
+
+      if (sha_len > 0 && !CheckSHA1(sha, p_node->sha1, sha_len))
+        {
+          pat = SAVEDIR_SRCOR;
+          dat = 3;
+        }
+    }
+
+  if (dat)
+    {
+      p_top->usr_data |= dat;
+    }
+
+  savedir(p_top, p_node->path, dat, pat);
+}
 
 // ==========================================================================
 // -- 
@@ -742,6 +845,15 @@ int iNamelist::Scandir( const TCHAR dir[], const TCHAR *prev_dir, void *param, i
     }
 
   /* Current folder search */
+
+  void *params = NULL;
+  TCHAR tmp[MAX_PATH];
+
+  ::GetCurrentDirectory(MAX_PATH, tmp);
+
+  scan_git_dir(buf, GitNodeCallback, (void *)&params);
+
+  ::SetCurrentDirectory(tmp);
 
   total = scandir( buf, &namelist, filter, D_Filter0, NULL, &act );
 

@@ -71,14 +71,13 @@ static D_NODE* Malloc(HANDLE hHeap, TCHAR *target)
   if (p_node)
     {
       _tcscpy_s(p_node->d_name, str_len, target);
-      p_node->size  = size;
-      p_node->hHeap = hHeap;
-      p_node->subd  = NULL;
-      p_node->ltime = 0;
-      p_node->htime = 0;
-      p_node->d_no  = 0;
-      p_node->attr  = 0;
-      p_node->exist = 0;
+      p_node->hHeap    = hHeap;
+      p_node->subd     = NULL;
+      p_node->ltime    = 0;
+      p_node->htime    = 0;
+      p_node->d_no     = 0;
+      p_node->exist    = 0;
+      p_node->usr_data = 0;
     }
 
   return p_node;
@@ -109,7 +108,6 @@ static D_NODE *create(void)
     {
       p_topd->next      = NULL;
       p_topd->subd      = NULL;
-      p_topd->size      = 0;
       p_topd->hHeap     = hHeap;
       p_topd->d_name[0] = _T('\0');
       _node_top         = p_topd;
@@ -187,11 +185,19 @@ D_NODE *savedir(const TCHAR *path)
 {
   D_NODE  *p_node = create();
 
-  return savedir(p_node, path);
+  return savedir(p_node, path, 0, SAVEDIR_INVALID);
 }
 
 /* ------------------------------------------------------------------------ */
-D_NODE *savedir(D_NODE *p_node, const TCHAR *path)
+D_NODE* savedir(const TCHAR *path, DWORD user_data, SAVEDIR_PATTERN pat)
+{
+  D_NODE  *p_node = create();
+
+  return savedir(p_node, path, user_data, pat);
+}
+
+/* ------------------------------------------------------------------------ */
+D_NODE *savedir(D_NODE *p_node, const TCHAR *path, DWORD user_data, SAVEDIR_PATTERN pat)
 {
   TCHAR   *cp;
   TCHAR   *buf;
@@ -207,6 +213,26 @@ D_NODE *savedir(D_NODE *p_node, const TCHAR *path)
   for (cp = _tcstok_s(buf, L"\\/", &ctxt); p_node && cp; cp = _tcstok_s(NULL, L"\\/", &ctxt))
     {
       p_node = node_search(p_node, cp);
+
+      if (!p_node)
+        {
+          break;
+        }
+
+      switch(pat)
+        {
+          case SAVEDIR_SRCCOPY:
+            p_node->usr_data = user_data;
+            break;
+          case SAVEDIR_SRCAND:
+            p_node->usr_data &= user_data;
+            break;
+          case SAVEDIR_SRCOR:
+            p_node->usr_data |= user_data;
+            break;
+          default:
+            break;
+        }
     }
 
   return p_node;
